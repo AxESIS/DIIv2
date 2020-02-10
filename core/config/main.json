@@ -1,0 +1,8 @@
+{
+	"main": {
+		"site" : {
+			"url_root": "/",
+			"url_path": "https://example.com.au/"
+		}
+	}
+}
