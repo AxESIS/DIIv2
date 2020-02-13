@@ -32,6 +32,9 @@ setlocale(LC_ALL,'en_US.UTF-8');
 date_default_timezone_set("Australia/Melbourne");
 
 //add the mysql namespace to here.
+use APE\V2\modules\database\mysql\mysql as mysql;
+use APE\V2\modules\rest\rest as rest;
+use APE\V2\modules\encryption\crypt as APEcrypt;
 
 //static variables
 require __DIR__ . "/core/static_variables.php";
@@ -39,6 +42,9 @@ $core_vars = new vars();
 
 //load the module information classes (templates)
 require __DIR__ . "/core/module_information/module_information.php";
+
+//load the updater class files.
+require __DIR__ . "/core/updater/updater.php";
 
 //bundling moduler
 require __DIR__ . "/core/bundler/absbundler.php";
@@ -48,3 +54,21 @@ $bundler = new bundler($core_vars);
 //load the config loader.
 require __DIR__ . "/core/config/config_loader.php";
 new config_loader($core_vars);
+
+$mysql = new mysql($core_vars::$config["rst"]["database"]["hostname"], $core_vars::$config["rst"]["database"]["username"], $core_vars::$config["rst"]["database"]["password"], $core_vars::$config["rst"]["database"]["database"]);
+
+$crypt = new APEcrypt($core_vars);
+
+//we need to setup a new update class.
+$update = new update($core_vars);
+$update_needed = $update->check();
+if($update_needed && (filter_input(INPUT_GET, "update") == 1)){
+		echo $update->do_update();
+		die();
+}
+elseif(!$update_needed && (filter_input(INPUT_GET, "update") == 1)){
+	echo "Update not needed";
+	die();
+}
+	
+
