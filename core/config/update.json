@@ -1,0 +1,13 @@
+{
+	"update": {
+		"site" : {
+			"path": "v2/"
+		},
+		"api" : {
+			"url": "https://api.axesis.com.au/v1/",
+			"user": "",
+			"pass": "",
+			"proxy": null
+		}
+	}
+}
